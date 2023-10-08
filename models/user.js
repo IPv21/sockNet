@@ -1,19 +1,6 @@
 const mongoose = require('mongoose');
-const User = mongoose.model('User', userSchema);
-
-const thoughtSchema = new mongoose.Schema(
-    {
-        text: {
-            type: String,
-            required: true,
-            max: 200,
-            trim: true,
-        },
-    },
-        { timestamps: true }    
 
 
-    );
 
 const userSchema = new mongoose.Schema(
     {
@@ -36,10 +23,18 @@ const userSchema = new mongoose.Schema(
                 message: props => `${props.value} is not a valid email address!`
             },
         },
-        thoughts: [thoughtSchema], //creates an array of thoughts
-},
+        thoughts: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Thought'
+        }], //creates an array of thoughts
+        friends: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }]
+    },
     { timestamps: true }
 );
 
 
+const User = mongoose.model('User', userSchema);
 module.exports = User;
