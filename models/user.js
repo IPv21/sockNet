@@ -56,7 +56,10 @@ const friendSchema = new mongoose.Schema(
                 message: props => `${props.value} is not a valid email address!`
             },
         },
-
+        friends: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }]
     },
     { timestamps: true }
 );
