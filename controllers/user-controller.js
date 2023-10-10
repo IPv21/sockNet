@@ -62,24 +62,46 @@ module.exports = {
         }
     },
     // Add a friend to a user
-    createFriend(req, res) {
-        User.findByIdAndUpdate(
-            ObjectId(req.params.userId),
-            { $addToSet: { friends: ObjectId(req.params.friendId) } },
-            { runValidators: true, new: true }
-          )
-            .then((user) =>
-              !user
-                ? res.status(404).json({ message: "<<<User ID not Found>>>" })
-                : res.json(user)
-            )
-            .catch((err) => res.status(500).json(err));
-        },
+async createFriend (req, res) {
+    try {
+        const friend = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $addToSet: { friends: req.params.friendId } },
+            { new: true }
+        );
+        if (!friend) {
+            res.status(404).json({ message: '<<<Friend ID not Found>>>' });
+            return;
+        }
+        res.json(friend);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+},
+
+
+// Delete a friend from a user
+async deleteFriend(req, res) {
+try {
+    const friend = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+    );
+    if (!friend) {
+        res.status(404).json({ message: '<<<Friend ID not Found>>>' });
+        return;
+    }
+    res.json(friend);
+}
+catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+}
+}
 }
 
-// Delete a friend from a user
 
-// Add a friend to a user
-
-// Delete a friend from a user
 
