@@ -1,6 +1,8 @@
 const User = require('../models/user');
 // const Friends = require('../models/friends');
 const { ObjectId } = require("mongoose").Types;
+const Thought = require('../models/thought'); // Adjust the path to match your project structure
+
 
 module.exports = {
     // Find all users
@@ -29,7 +31,7 @@ module.exports = {
     // Update a user by id
   updateUser(req, res) {
     User.findByIdAndUpdate(
-      ObjectId(req.params.userId),
+      new ObjectId(req.params.userId),
       { $set: req.body },
       { runValidators: true, new: true }
     )
